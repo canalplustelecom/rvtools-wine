@@ -67,7 +67,7 @@ A typical usage could be to run the command above each week with `crontab`:
 ```shell
 # Edit your cron tasks
 crontab -e
-# Add commands launching the project to it and whatever else you want
+# Add the project's command to this file and whatever else you want
 54 1 * * 2 docker run -d --rm cpt/rvtools-wine >> /var/log/rvtools-wine.log 2>&1
 @weekly date >> /var/log/beforereboot.log && /sbin/shutdown -r +5
 ```
