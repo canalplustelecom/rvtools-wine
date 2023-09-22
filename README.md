@@ -38,17 +38,18 @@ git pull
 
 - Add the installer file `RVTools4.2.2.msi` inside project's folder.
 
-- Create a copy of `.env.template` to `.env` and modify the file so the variables match with your environment:
+- Create a copy of `.env.sh.template` to `.env.sh` and modify the file so the variables match with your environment:
 
 ```shell
-cp .env.template .env
-vi .env
+cp .env.sh.template .env.sh
+vi .env.sh
 ```
 
-- Source the file to "load" the variables on your system:
+- Create a copy of `.message.txt.template` to `.message.txt` and modify the file with the message you want to send (supports environment variables):
 
 ```shell
-source .env
+cp .message.txt.template .message.txt
+vi .message.txt
 ```
 
 - If you have Docker installed you just have to type the following commands and wait approximately **15 minutes** for the program to run completely (after building the image).
@@ -58,6 +59,17 @@ source .env
 docker build -t cpt/rvtools-wine .
 # Run the image inside a container
 docker run -d --rm cpt/rvtools-wine
+```
+
+## Example
+A typical usage could be to run the command above each week with `crontab`:
+
+```shell
+# Edit your cron tasks
+crontab -e
+# Add commands launching the project to it and whatever else you want
+54 1 * * 2 docker run -d --rm cpt/rvtools-wine >> /var/log/rvtools-wine.log 2>&1
+@weekly date >> /var/log/beforereboot.log && /sbin/shutdown -r +5
 ```
 
 ## Authors & Credit
