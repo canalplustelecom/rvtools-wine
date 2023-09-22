@@ -14,7 +14,7 @@ RUN apt-get update \
     && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
         sendmail \
         sharutils \
-		locales \
+        locales \
         gettext \
     && rm -rf /var/lib/apt/lists/*
 
