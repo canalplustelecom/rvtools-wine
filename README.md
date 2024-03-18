@@ -18,7 +18,20 @@ Please make sure you have the following prerequisites:
 
 - [Git](https://git-scm.com/downloads)
 - [Docker](https://www.docker.com/)
-- [RVTools](https://www.robware.net/rvtools/) Installer file (tested with `v4.2.2`, search for `RVTools4.2.2.msi` on Google)
+- [RVTools](https://www.robware.net/rvtools/) Installer file (tested with [`v4.2.2`](https://archive.org/details/rvtools-4.2.2))
+<details>
+<summary>Show details for RVTools</summary>
+
+```
+Name: RVTools 4.2.2
+File name: RVTools4.2.2.msi
+File Size: 6.7 MB
+SHA-256 Checksum: bb947325f9b58b715bcb5dd761ec8156b01d0fa07f4a0baeefa0ed75779bdc41
+Published: 2021-12-29
+```
+
+</details>
+
 
 ### Downloading the source code
 Clone the repository:
