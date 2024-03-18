@@ -73,6 +73,6 @@ crontab -e
 ```
 
 ## Authors & Credit
-* scottyhardy (creator of the image that NyaMisty based his image on, source : https://github.com/scottyhardy/docker-wine)
+* scottyhardy (creator of the image that NyaMisty based his image on, source: https://github.com/scottyhardy/docker-wine)
 * NyaMisty (creator of the image with DotNET integrated I based this project on, source: https://github.com/NyaMisty/docker-wine-dotnet & https://hub.docker.com/r/nyamisty/docker-wine-dotnet)
 * GERARD Angelo
