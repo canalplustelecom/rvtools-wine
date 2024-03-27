@@ -18,6 +18,7 @@ Please make sure you have the following prerequisites:
 
 - [Git](https://git-scm.com/downloads)
 - [Docker](https://www.docker.com/)
+- SMTP mail server
 - [RVTools](https://www.robware.net/rvtools/) Installer file (tested with [`v4.2.2`](https://archive.org/details/rvtools-4.2.2))
 <details>
 <summary>Show details for RVTools</summary>
