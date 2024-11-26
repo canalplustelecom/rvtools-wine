@@ -1,4 +1,4 @@
-FROM nyamisty/docker-wine-dotnet:win32-stable-9.0-20241125
+FROM nyamisty/docker-wine-dotnet:win32-stable-9.0-20241125-noports
 
 # Define RVTools installer file name
 ARG RVToolsFile=RVTools4.2.2.msi
@@ -41,6 +41,9 @@ COPY rvt-gen-script.sh /app/rvt-gen-script.sh
 
 # Install RVTools
 RUN wine msiexec /i ./${RVToolsFile} /quiet
+
+# Delete RVTools installer
+RUN rm -rf ./${RVToolsFile}
 
 # Set the locale
 RUN sed -i '/fr_FR.UTF-8/s/^# //g' /etc/locale.gen \
