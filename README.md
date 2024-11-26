@@ -86,6 +86,20 @@ crontab -e
 @weekly date >> /var/log/beforereboot.log && /sbin/shutdown -r +5
 ```
 
+## Troubleshooting
+The following command can help you troubleshoot the image (you also have to modify `rvt-gen-script.sh` to strip `xvfb-run` so RVTools window shows on your display):
+```shell
+docker run --net host -e DISPLAY=${DISPLAY} --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix:rw --entrypoint /bin/bash cpt/rvtools-wine
+```
+Non-exhaustive list of errors you can safely ignore in console:
+```
+log4net:ERROR Failed to find configuration section 'log4net' in the application's .config file. Check your .config file for the <log4net> and <configSections> elements. The configuration section should look like: <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net" />
+```
+And:
+```
+X connection to :99 broken (explicit kill or server shutdown).
+```
+
 ## Authors & Credit
 * scottyhardy (creator of the image that NyaMisty based his image on, source: https://github.com/scottyhardy/docker-wine)
 * NyaMisty (creator of the image with DotNET integrated I based this project on, source: https://github.com/NyaMisty/docker-wine-dotnet & https://hub.docker.com/r/nyamisty/docker-wine-dotnet)

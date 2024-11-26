@@ -1,4 +1,4 @@
-FROM nyamisty/docker-wine-dotnet:win32-devel-7.2
+FROM nyamisty/docker-wine-dotnet:win32-stable-9.0-20241125
 
 # Define RVTools installer file name
 ARG RVToolsFile=RVTools4.2.2.msi

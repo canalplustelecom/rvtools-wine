@@ -1,0 +1,4 @@
+name: rvtools-wine
+services:
+  rvt:
+    build: .
