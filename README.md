@@ -22,8 +22,11 @@ This project sends [RVTools](https://www.robware.net/rvtools/) file exported fro
 ## Installation
 > [!IMPORTANT]
 > We recommend using Ubuntu to **build** the image (tested with Ubuntu 24.04 LTS), might work with other Linux distros too.
+
+> [!WARNING]
+> Building is **not working** on macOS Sequoia (15.1.1) using Docker Desktop (4.36.0) by adding `FROM --platform=linux/386 i386/alpine:3.20 AS base` to `Dockerfile`.
 >
-> Not working on macOS Sequoia (15.1.1) using Docker Desktop (4.36.0) by adding `FROM --platform=linux/386 i386/alpine:3.20 AS base` to `Dockerfile`. In my case, it crashed while installing .NET with a `Segmentation fault` from QEMU (issue with x86 emulation on arm64).
+> In my case, it crashed while installing .NET with a `Segmentation fault` from QEMU (issue with x86 emulation on arm64).
 
 Please make sure you have the following prerequisites:
 
