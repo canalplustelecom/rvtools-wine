@@ -6,7 +6,9 @@
 This project sends [RVTools](https://www.robware.net/rvtools/) file exported from your VMware infrastructure by mail using [Wine](https://www.winehq.org/) and [Docker](https://www.docker.com/)
 
 ## Screenshot
-<img src="img/screenshot.png">
+<p align="center">
+  <img src="img/screenshot.png">
+</p>
 
 ## Features
 - [x] Sends `.xlsx` file exported from RVTools to a mail address of your choice
