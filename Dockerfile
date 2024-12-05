@@ -1,65 +1,55 @@
-FROM nyamisty/docker-wine-dotnet:win32-stable-9.0-20241125-noports
-
-# Define RVTools installer file name
-ARG RVToolsFile=RVTools4.2.2.msi
+FROM i386/alpine:3.20 AS build
 
 LABEL maintainer="Angelo GERARD from CANAL+ Télécom System DevOps & Automation Team"
 
-RUN mkdir -p /app
+# Define RVTools installer file name
+ENV RVToolsFile=RVTools4.2.2.msi
 
-WORKDIR "/app"
+# Copy required files from host
+COPY --chmod=0755 .env.sh .message.txt rvt-gen-script.sh ${RVToolsFile} ./
 
-# Install prerequisites
-RUN apt-get update \
-    && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
-        sendmail \
-        sharutils \
-        locales \
-        gettext \
-    && rm -rf /var/lib/apt/lists/*
+# Startup script with env variables to load user defined preferences and locale
+RUN echo -e "export MUSL_LOCPATH=\"/usr/share/i18n/locales/musl\"\nexport WINEDEBUG=\"fixme-all\"" >> .env.sh \
+    && cat .env.sh > /etc/profile.d/77rvtools.sh
 
-# Get environment variable file
-COPY .env.sh /app/.env.sh
+# Load env variables by switching shell
+SHELL ["/bin/sh", "-l", "-c"]
 
-# Get mail message file
-COPY .message.txt /app/.message.txt
+# Install template script
+RUN echo -e "#!/usr/bin/awk -f\n{ for (a in ENVIRON) gsub(\"{{\" _ a _ \"}}\", ENVIRON[a]); print }" > /usr/bin/envtmpl \
+    && chmod +x /usr/bin/envtmpl
 
-# Load environment variable file
-ENV BASH_ENV=/app/.env.sh
+# Install msmtp configuration file
+RUN echo -e "defaults\nport {{SMTPport}}\naccount myrvtools\nhost {{SMTPserver}}\nfrom {{Mailfrom}}\naccount default : myrvtools" | envtmpl > $HOME/.msmtprc \
+    && chmod 600 $HOME/.msmtprc
 
-# Set SHELL to bash for running commands in the virtual environment
-SHELL ["/bin/bash", "-c"]
+# Install Wine, msmtp and dependencies
+RUN apk add --no-cache --update wine=9.0-r0 xvfb-run=1.20.10.3-r2 msmtp=1.8.26-r0 gnutls=3.8.5-r0 uuidgen=2.40.1-r1 libintl=0.22.5-r0 tzdata=2024b-r0 musl-locales=0.1.0-r1 \
+    && rm -rf /var/cache/apk/* /tmp/*
 
-# Download RVTools installer
-COPY ${RVToolsFile} /app/${RVToolsFile}
-
-# Change access permissions for RVTools installer to allow it to be executed
-RUN chmod +x /app/${RVToolsFile}
-
-# Download RVTools script
-COPY rvt-gen-script.sh /app/rvt-gen-script.sh
+# Setup a Wine prefix with .NET
+RUN apk add --no-cache winetricks=20240105-r0 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
+    && winecfg && wineboot -u \
+    && winetricks -q dotnet48 \
+    && wineserver -k \
+    && apk del winetricks \
+    && rm -rf $HOME/.cache/winetricks $HOME/.cache /var/cache/apk/* /tmp/*
 
 # Install RVTools
-RUN wine msiexec /i ./${RVToolsFile} /quiet
+RUN wine msiexec /i ${RVToolsFile} /quiet \
+    && rm -rf ${RVToolsFile} /var/cache/apk/* /tmp/*
 
-# Delete RVTools installer
-RUN rm -rf ./${RVToolsFile}
+# Cleaning file system (including unused Windows DLLs) to create the most compact image possible
+RUN cd $HOME/.wine/drive_c/windows/Microsoft.NET/assembly/GAC_MSIL && rm -rf PresentationFramework System.Design Microsoft.Build Microsoft.Build.Tasks.v4.0 && cd - && rm -rf $HOME/.wine/drive_c/windows/Microsoft.NET/NETFXRepair.* $HOME/.wine/drive_c/users/root/Temp $HOME/.wine/drive_c/windows/Installer && rm -rf /usr/lib/gstreamer-1.0 && cd $HOME/.wine/drive_c/Program\ Files/Robware/RVTools && rm EULA.rtf RVTools.pdf RVToolsMergeExcelFiles.exe RVToolsMergeExcelFiles.exe.config RVToolsSendMail.exe RVToolsSendMail.exe.config RVToolsPasswordEncryption.exe RVToolsPasswordEncryption.exe.config RVToolsBatchMultipleVCs.ps1 ICSharpCode.SharpZipLib.dll && cd - && rm -rf $HOME/.wine/drive_c/windows/Microsoft.NET/Framework/v4.0.30319/SetupCache && rm -rf $HOME/.wine/drive_c/windows/assembly && cd /usr/lib/wine/i386-windows && ls | grep -E "jscript.dll|winmm.dll|atl100.dll|msvfw32.dll|quartz.dll|cryptdlg.dll|devenum.dll|qcap.dll|qedit.dll|urlmon.dll|winegstreamer.dll|compstui.dll|winspool.drv|wineps.drv|winprint.dll|.exe16$|.dll16$|comctl32.dll|msi.dll|windowscodecs.dll|cryptui.dll|oleaut32.dll|^msvcr\d|^x3daudio|^xinput|^msvcp|^d3d|^xaudio|^xactengine|wldap32.dll|mshtml.dll|wined3d.dll|msxml3.dll|light.msstyles|comdlg32.dll|opengl32.dll|actxprxy.dll" | xargs rm && ls | grep -Ev ".drv$|.dll$|wineboot.exe|winecfg.exe|start.exe|rundll32.exe|services.exe|explorer.exe" | xargs rm && cd -
 
-# Set the locale
-RUN sed -i '/fr_FR.UTF-8/s/^# //g' /etc/locale.gen \
-    && locale-gen
-ENV TZ "Europe/Paris"
-ENV LANG fr_FR.UTF-8
-ENV LANGUAGE fr_FR:fr
-ENV LC_ALL fr_FR.UTF-8
+# Create a lightweight single layer image using multi-stage build to clear deleted files from final build
+FROM scratch
 
-# Complete sendmail config file
-RUN sed -z 's|MAILER_DEFINITIONS\nMAILER(`local\x27)dnl|MAILER_DEFINITIONS\ndefine(`SMART_HOST\x27,`['"${SMTPserver}"']\x27)dnl\ndefine(`RELAY_MAILER_ARGS\x27, `TCP $h 25\x27)dnl\ndefine(`ESMTP_MAILER_ARGS\x27, `TCP $h 25\x27)dnl\ndefine(`confAUTH_OPTIONS\x27, `A p\x27)dnl\nFEATURE(`authinfo\x27,`hash -o /etc/mail/authinfo/smtp-auth.db\x27)dnl\nMAILER(`local\x27)dnl|g' -i /etc/mail/sendmail.mc \
-    # Compile sendmail config file
-    && make -C /etc/mail
+# Copy all files from build
+COPY --from=build / /
 
-# Change access permissions for RVTools script to allow it to be executed
-RUN chmod +x /app/rvt-gen-script.sh
+# Load env variables by switching shell
+SHELL ["/bin/sh", "-l", "-c"]
 
-# Set the entrypoint of the Docker image
+# Entrypoint script to run RVTools
 ENTRYPOINT ./rvt-gen-script.sh

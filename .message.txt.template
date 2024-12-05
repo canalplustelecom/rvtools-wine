@@ -1,6 +1,6 @@
 Hi,
 
-Please find attached the inventory file exported on $FRDateFormat.
+Please find attached the inventory file exported on {{FRDateFormat}} {{FRDateTimezone}}.
 
 Best regards,
 

@@ -1,13 +1,12 @@
-#!/usr/bin/env bash
-
-/etc/init.d/sendmail reload
+#!/bin/sh
+set -x
 
 Mailpart=`uuidgen`
 Mailpart_body=`uuidgen`
 AttachmentDir=.
 AttachmentDirWin="$(winepath -w $AttachmentDir)"
 Attach="$AttachmentDir/$AttachmentFile"
-message=`envsubst < .message.txt`
+message=`cat .message.txt | envtmpl`
 
 echo "Generating the RVTools xlsx file..."
 if (env WINEARCH=win32 WINEPREFIX=$(realpath ~/.wine32) DISPLAY=${DISPLAY} WINEDLLOVERRIDES="mscoree,mshtml=" xvfb-run wine wineboot && xvfb-run wineserver -w && xvfb-run wine cmd.exe /c "C:\Program Files\Robware\RVTools\RVTools.exe" -s $VCSAserver -u $VCSAuser -p $VCSAencryptedpass -c ExportAll2xlsx -d $AttachmentDirWin -f $AttachmentFile) ; then
@@ -37,7 +36,7 @@ $message"
         echo ""
         uuencode $Attach $(basename $Attach)
         echo "--$Mailpart--"
-    ) | /usr/sbin/sendmail -v -oi -f $Mailfrom -t
+    ) | msmtp -t
     echo "[OK] The script was executed successfully"
 else
     echo "[ERR] An error occurred while running the script"

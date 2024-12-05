@@ -6,14 +6,23 @@
 This project sends [RVTools](https://www.robware.net/rvtools/) file exported from your VMware infrastructure by mail using [Wine](https://www.winehq.org/) and [Docker](https://www.docker.com/)
 
 ## Screenshot
-*Coming soon*
+<img src="img/screenshot.png">
 
 ## Features
 - [x] Sends `.xlsx` file exported from RVTools to a mail address of your choice
 - [x] Only needs Docker to work, everything else is automated!
+- [x] Super lightweight by running on Alpine Linux! (less than 650 MB compared to Ubuntu with 5 GB!)
+- [ ] TO DO: Allow dynamic variable modification in `.env.sh` without needing to rebuild the image to apply
+- [ ] TO DO: Push the image to Docker Hub
+- [ ] TO DO: If possible, reduce image size even more to below 500 MB
 - [ ] *More coming soon...*
 
 ## Installation
+> [!IMPORTANT]
+> We recommend using Ubuntu to **build** the image (tested with Ubuntu 24.04 LTS), might work with other Linux distros too.
+>
+> Not working on macOS Sequoia (15.1.1) using Docker Desktop (4.36.0) by adding `FROM --platform=linux/386 i386/alpine:3.20 AS base` to `Dockerfile`. In my case, it crashed while installing .NET with a `Segmentation fault` from QEMU (issue with x86 emulation on arm64).
+
 Please make sure you have the following prerequisites:
 
 - [Git](https://git-scm.com/downloads)
@@ -102,5 +111,5 @@ X connection to :99 broken (explicit kill or server shutdown).
 
 ## Authors & Credit
 * scottyhardy (creator of the image that NyaMisty based his image on, source: https://github.com/scottyhardy/docker-wine)
-* NyaMisty (creator of the image with DotNET integrated I based this project on, source: https://github.com/NyaMisty/docker-wine-dotnet & https://hub.docker.com/r/nyamisty/docker-wine-dotnet)
+* NyaMisty (creator of the image with DotNET integrated I *originally* based this project on, source: https://github.com/NyaMisty/docker-wine-dotnet & https://hub.docker.com/r/nyamisty/docker-wine-dotnet)
 * GERARD Angelo
