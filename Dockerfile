@@ -24,7 +24,7 @@ RUN echo -e "defaults\nport {{SMTPport}}\naccount myrvtools\nhost {{SMTPserver}}
     && chmod 600 $HOME/.msmtprc
 
 # Install Wine, msmtp and dependencies
-RUN apk add --no-cache --update wine=9.0-r0 xvfb-run=1.20.10.3-r2 msmtp=1.8.26-r0 gnutls=3.8.5-r0 uuidgen=2.40.1-r1 libintl=0.22.5-r0 tzdata=2025a-r0 musl-locales=0.1.0-r1 \
+RUN apk add --no-cache --update wine=9.0-r0 xvfb-run=1.20.10.3-r2 msmtp=1.8.26-r0 gnutls=3.8.5-r0 uuidgen=2.40.1-r1 libintl=0.22.5-r0 tzdata=2025b-r0 musl-locales=0.1.0-r1 \
     && rm -rf /var/cache/apk/* /tmp/*
 
 # Setup a Wine prefix with .NET
