@@ -1,13 +1,14 @@
 #!/bin/sh
 set -x
 
+. .env.sh
 Mailpart=`uuidgen`
 Mailpart_body=`uuidgen`
 AttachmentDir=.
 AttachmentDirWin="$(winepath -w $AttachmentDir)"
 Attach="$AttachmentDir/$AttachmentFile"
 message=`cat .message.txt | envtmpl`
-
+cat ~/.msmtprc | envtmpl > ~/.msmtprc
 echo "Generating the RVTools xlsx file..."
 if (env WINEARCH=win32 WINEPREFIX=$(realpath ~/.wine32) DISPLAY=${DISPLAY} WINEDLLOVERRIDES="mscoree,mshtml=" xvfb-run wine wineboot && xvfb-run wineserver -w && xvfb-run wine cmd.exe /c "C:\Program Files\Robware\RVTools\RVTools.exe" -s $VCSAserver -u $VCSAuser -p $VCSAencryptedpass -c ExportAll2xlsx -d $AttachmentDirWin -f $AttachmentFile) ; then
     echo "Sending the RVTools xlsx file by email..."

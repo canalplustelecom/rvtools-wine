@@ -1,0 +1,8 @@
+name: rvtools-wine
+services:
+  rvt:
+    build: .
+    volumes:
+      - ./rvt-gen.sh:/rvt-gen.sh
+      - ./.env.sh:/.env.sh
+      - ./.message.txt:/.message.txt
