@@ -6,7 +6,7 @@ LABEL maintainer="Angelo GERARD from CANAL+ Télécom System DevOps & Automation
 ENV RVToolsFile=RVTools4.2.2.msi
 
 # Copy required files from host
-COPY --chmod=0755 ${RVToolsFile} ./
+COPY --chmod=0755 ${RVToolsFile} rvt-gen.sh ./
 
 # Install template script
 RUN echo -e "#!/usr/bin/awk -f\n{ for (a in ENVIRON) gsub(\"{{\" _ a _ \"}}\", ENVIRON[a]); print }" > /usr/bin/envtmpl \
