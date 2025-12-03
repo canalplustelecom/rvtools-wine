@@ -14,8 +14,8 @@ This project sends [RVTools](https://www.robware.net/rvtools/) file exported fro
 - [x] Sends `.xlsx` file exported from RVTools to a mail address of your choice
 - [x] Only needs Docker to work, everything else is automated!
 - [x] Super lightweight by running on Alpine Linux! (less than 650 MB compared to Ubuntu with 5 GB!)
-- [ ] TO DO: Allow dynamic variable modification in `.env.sh` without needing to rebuild the image to apply
-- [ ] TO DO: Push the image to Docker Hub
+- [x] Dynamic variable loading from `.env.sh`, `.message.txt`, etc. when modified, no need to rebuild the image to apply!
+- [ ] TO DO: Push the image to Docker Hub and/or GitHub
 - [ ] TO DO: If possible, reduce image size even more to below 500 MB
 - [ ] *More coming soon...*
 
