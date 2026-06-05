@@ -3,7 +3,7 @@
 </p>
 
 # RVTools mailer on Wine - Docker image
-This project sends [RVTools](https://www.robware.net/rvtools/) file exported from your VMware infrastructure by mail using [Wine](https://www.winehq.org/) and [Docker](https://www.docker.com/)
+This project sends [RVTools](https://www.robware.net/rvtools/) file exported from your VMware infrastructure by email using [Wine](https://www.winehq.org/) and [Docker](https://www.docker.com/)
 
 ## Screenshot
 <p align="center">
