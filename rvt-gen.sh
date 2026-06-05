@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 set -x
 
 . .env.sh
@@ -10,7 +10,7 @@ Attach="$AttachmentDir/$AttachmentFile"
 message=`cat .message.txt | envtmpl`
 cat ~/.msmtprc | envtmpl > ~/.msmtprc
 echo "Generating the RVTools xlsx file..."
-if (env WINEARCH=win32 WINEPREFIX=$(realpath ~/.wine32) DISPLAY=${DISPLAY} WINEDLLOVERRIDES="mscoree,mshtml=" xvfb-run wine wineboot && xvfb-run wineserver -w && xvfb-run wine cmd.exe /c "C:\Program Files\Robware\RVTools\RVTools.exe" -s $VCSAserver -u $VCSAuser -p $VCSAencryptedpass -c ExportAll2xlsx -d $AttachmentDirWin -f $AttachmentFile) ; then
+if (WINEPREFIX=/ wineboot && xvfb-run wine "C:\Program Files\Robware\RVTools\RVTools.exe" -s $VCSAserver -u $VCSAuser -p $VCSAencryptedpass -c ExportAll2xlsx -d $AttachmentDirWin -f $AttachmentFile) ; then
     echo "Sending the RVTools xlsx file by email..."
     (
         echo "From: $Mailfrom"

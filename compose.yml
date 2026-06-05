@@ -2,6 +2,7 @@ name: rvtools-wine
 services:
   rvt:
     build: .
+    image: cpt/rvtools-wine
     volumes:
       - ./rvt-gen.sh:/rvt-gen.sh
       - ./.env.sh:/.env.sh

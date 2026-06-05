@@ -13,8 +13,7 @@ This project sends [RVTools](https://www.robware.net/rvtools/) file exported fro
 ## Features
 - [x] Sends `.xlsx` file exported from RVTools to a mail address of your choice
 - [x] Only needs Docker to work, everything else is automated!
-- [x] Super lightweight by running on Alpine Linux! (less than 650 MB compared to Ubuntu with 5 GB!)
-- [x] Dynamic variable loading from `.env.sh`, `.message.txt`, etc. when modified, no need to rebuild the image to apply!
+- [x] Super lightweight by running on Alpine Linux! (complete image size is less than 570 MB compared to Ubuntu with 5 GB!)
 - [ ] TO DO: Push the image to Docker Hub and/or GitHub
 - [ ] TO DO: If possible, reduce image size even more to below 500 MB
 - [ ] *More coming soon...*
@@ -101,10 +100,12 @@ crontab -e
 ```
 
 ## Troubleshooting
-The following command can help you troubleshoot the image (you also have to modify `rvt-gen-script.sh` to strip `xvfb-run` so RVTools window shows on your display):
+The following command can help you troubleshoot the image (you also have to modify `rvt-gen-script.sh` to strip `xvfb-run` so RVTools window shows on your display and add `WINEDEBUG=+relay` to show verbose output, like this: `WINEDEBUG=+relay WINEPREFIX=/ wineboot`):
 ```shell
-docker run --net host -e DISPLAY=${DISPLAY} --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix:rw --entrypoint /bin/bash cpt/rvtools-wine
+docker run --net host -e DISPLAY=${DISPLAY} --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /tmp/.env.sh:/.env.sh -v /tmp/.message.txt:/.message.txt -v /tmp/rvt-gen.sh:/rvt-gen.sh --entrypoint /bin/sh cpt/rvtools-wine
 ```
+If needed, you can find the tested Alpine Linux packages versions in `installed.txt` file used during the latest release of the project.
+
 Non-exhaustive list of errors you can safely ignore in console:
 ```
 log4net:ERROR Failed to find configuration section 'log4net' in the application's .config file. Check your .config file for the <log4net> and <configSections> elements. The configuration section should look like: <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net" />
