@@ -13,7 +13,7 @@ RUN echo -e "#!/usr/bin/awk -f\n{ for (a in ENVIRON) gsub(\"{{\" _ a _ \"}}\", E
     && chmod +x /usr/bin/envtmpl
 
 # Install msmtp configuration file
-RUN install -m 600 <(echo -e "defaults\nport {{SMTPport}}\naccount rvt\nhost {{SMTPserver}}\nfrom {{Mailfrom}}\naccount default : rvt") ~/.msmtprc
+RUN install -m 600 <(echo -e "defaults\nport {{SMTPport}}\naccount rvt\nhost {{SMTPserver}}\nfrom {{Mailfrom}}\naccount default : rvt") /mymsmtprc
 
 # Install Wine, msmtp and dependencies
 RUN apk add --no-cache --update wine xvfb-run msmtp gnutls uuidgen libintl tzdata musl-locales \

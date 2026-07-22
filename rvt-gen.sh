@@ -8,7 +8,7 @@ AttachmentDir=.
 AttachmentDirWin="$(winepath -w $AttachmentDir)"
 Attach="$AttachmentDir/$AttachmentFile"
 message=`cat .message.txt | envtmpl`
-cat ~/.msmtprc | envtmpl > ~/.msmtprc
+cat /mymsmtprc | envtmpl > /etc/msmtprc
 echo "Generating the RVTools xlsx file..."
 if (WINEPREFIX=/ wineboot && xvfb-run wine "C:\Program Files\Robware\RVTools\RVTools.exe" -s $VCSAserver -u $VCSAuser -p $VCSAencryptedpass -c ExportAll2xlsx -d $AttachmentDirWin -f $AttachmentFile) ; then
     echo "Sending the RVTools xlsx file by email..."
