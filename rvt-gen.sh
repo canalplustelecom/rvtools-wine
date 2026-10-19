@@ -4,7 +4,7 @@ set -x
 . .env.sh
 Mailpart=`uuidgen`
 Mailpart_body=`uuidgen`
-AttachmentDir=.
+AttachmentDir=/exports
 AttachmentDirWin="$(winepath -w $AttachmentDir)"
 Attach="$AttachmentDir/$AttachmentFile"
 message=`cat .message.txt | envtmpl`

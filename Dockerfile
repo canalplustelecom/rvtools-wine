@@ -43,5 +43,8 @@ COPY --from=build / /
 # Load env variables by switching shell for language and date preferences
 SHELL ["/bin/sh", "-l", "-c"]
 
+# RVTools exports directory
+RUN mkdir /exports
+
 # Entrypoint script to run RVTools
 ENTRYPOINT ./rvt-gen.sh

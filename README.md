@@ -102,7 +102,7 @@ crontab -e
 ## Troubleshooting
 The following command can help you troubleshoot the image (you also have to modify `rvt-gen-script.sh` to strip `xvfb-run` so RVTools window shows on your display and add `WINEDEBUG=+relay` to show verbose output, like this: `WINEDEBUG=+relay WINEPREFIX=/ wineboot`):
 ```shell
-docker run --net host -e DISPLAY=${DISPLAY} --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /tmp/.env.sh:/.env.sh -v /tmp/.message.txt:/.message.txt -v /tmp/rvt-gen.sh:/rvt-gen.sh --entrypoint /bin/sh cpt/rvtools-wine
+docker run --net host -e DISPLAY=${DISPLAY} --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v /tmp/.env.sh:/.env.sh -v /tmp/.message.txt:/.message.txt -v /tmp/rvt-gen.sh:/rvt-gen.sh -v /tmp/exports:/exports --entrypoint /bin/sh cpt/rvtools-wine
 ```
 If needed, you can find the tested Alpine Linux packages versions in `installed.txt` file used during the latest release of the project.
 
